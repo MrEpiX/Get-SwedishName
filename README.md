@@ -7,7 +7,7 @@ This is intended to be an example of how to make a good-looking GUI in PowerShel
 * The data is taken from the public API http://www.namnapi.se/.
 
 # What
-The PowerShell script itself simply lists a number of randomized Swedish names in a window, with options for copying or exporting the content.
+The PowerShell script itself simply lists a number of randomized Swedish names in a window.
 
 # License
 This project is licensed under MIT.
