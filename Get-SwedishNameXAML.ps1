@@ -1,36 +1,14 @@
-<#
-Import-Module "$($PSScriptRoot)\MaterialDesignColors.dll"
-Import-Module "$($PSScriptRoot)\MaterialDesignThemes.wpf.dll"
-
-    <Window.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Dark.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.Amber.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.DeepPurple.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </Window.Resources>
-
-        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
-        TextElement.FontWeight="Regular"
-        TextElement.FontSize="13"
-        TextOptions.TextFormattingMode="Ideal" 
-        TextOptions.TextRenderingMode="Auto"        
-        Background="{DynamicResource MaterialDesignPaper}"
-        FontFamily="{DynamicResource MaterialDesignFont}"
-
-#>
+# Include assembly PresentationFramework to be able to create WPF app
 Add-Type -AssemblyName PresentationFramework
 
+# XAML of the application
 [xml]$xaml = @"
 <Window 
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Get-SwedishNamesXAML"
-        SizeToContent="WidthAndHeight">
+        SizeToContent="WidthAndHeight"
+        ResizeMode="NoResize">
 
     <Grid Width="400">
         <Grid.RowDefinitions>
@@ -51,10 +29,12 @@ Add-Type -AssemblyName PresentationFramework
 </Window>
 "@
 
-$reader=(New-Object System.Xml.XmlNodeReader $xaml)
-$window=[Windows.Markup.XamlReader]::Load($reader)
+# Create reader to parse XML
+$reader = (New-Object System.Xml.XmlNodeReader $xaml)
+# Create window from reader content
+$window = [Windows.Markup.XamlReader]::Load($reader)
 
-# Create variables from the objects in the XAML
+# Creates/sets variables from the objects in the XAML
 $xaml.SelectNodes("//*[@Name]") | ForEach-Object { Set-Variable -Name ($_.Name) -Value $window.FindName($_.Name) }
 
 $PopulateButton.Add_Click{
