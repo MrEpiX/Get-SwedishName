@@ -63,14 +63,14 @@ $button.VerticalAlignment = [System.Windows.VerticalAlignment]::Top
 # Add Button to grid
 $grid.AddChild($button)
 
-# Add function for clicking on the button
+# add function to get names when button is clicked
 $button.Add_Click{
     $result = Invoke-WebRequest -Uri http://api.namnapi.se/v2/names.json?limit=30 -ContentType "application/json" | ConvertFrom-Json
 
     $listView.Items.Clear()
 
     # Pretend long operation is happening
-    #Start-Sleep 10
+    Start-Sleep 10
 
     foreach($item in $result.names)
     {

@@ -37,13 +37,14 @@ $window = [Windows.Markup.XamlReader]::Load($reader)
 # Creates/sets variables from the objects in the XAML
 $xaml.SelectNodes("//*[@Name]") | ForEach-Object { Set-Variable -Name ($_.Name) -Value $window.FindName($_.Name) }
 
+# add function to get names when button is clicked
 $PopulateButton.Add_Click{
     $result = Invoke-WebRequest -Uri http://api.namnapi.se/v2/names.json?limit=30 -ContentType "application/json" | ConvertFrom-Json
 
     $TestListView.Items.Clear()
 
     # Pretend long operation is happening
-    #Start-Sleep 10
+    Start-Sleep 10
 
     foreach($item in $result.names)
     {

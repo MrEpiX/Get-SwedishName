@@ -7,9 +7,10 @@ This is intended to be an example of how to make a good-looking GUI in PowerShel
 
 # What
 The PowerShell script itself simply lists a number of randomized Swedish names in a window.
+* Presentation.ps1 are some notes I made for the presentation at PUGS 2018-12-10.
 * Get-SwedishNameCode.ps1 creates the window using only code.
 * Get-SwedishNameXAML.ps1 creates the window using XAML.
-* Presentation.ps1 is some notes I made for the presentation at PUGS 2018-12-10.
+* Get-SwedishNameXAMLRunspace.ps1 creates the window on a different thread using XAML and runspaces.
 
 # Inspiration and links
 There is great information about WPF out there, here are a few links to get you started in PowerShell.
