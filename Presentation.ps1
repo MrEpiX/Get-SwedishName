@@ -1,5 +1,9 @@
 # https://github.com/MrEpiX/Get-SwedishName
 
+# Andra PowerShell-GUI sources
+# https://poshgui.com/ - Designa Windows Forms i PowerShell online
+# https://github.com/ShowUI/ShowUI - Modul för att skapa GUI lättare
+
 # Anteckningar för PUGS
 # http://apikatalogen.se/api - Det finns massor av svenska API:er. Text-TV, Tradera, trafikinfo, slå upp telefonnummer
 # http://www.namnapi.se/ - 100 vanligaste tilltals- och efternamnen för svenska män och kvinnor, 20 000 kombinationer
@@ -58,12 +62,8 @@ Import-Module "$($PSScriptRoot)\MaterialDesignThemes.wpf.dll"
 # # # # # # # # # # 2 # # # # # # # # # #
 
 # Dispatcher krävs för att uppdatera GUI i annan tråd
-# Man behöver då skicka med ett scriptblock i form av en [Action] som är en typ av delegate inom .NET - ett sätt att skriva anonyma metoder
 # Man kan skicka med en DispatcherPriority - https://docs.microsoft.com/en-us/dotnet/api/system.windows.threading.dispatcherpriority
 # Generellt används "Normal" men man kan använda detta för att ha t.ex en spell checker med lägre prioritet än "Render" som då kan köras under idle time för GUI-tråden
-# $syncHash.PopulateButton.Dispatcher.Invoke([Action]{ $syncHash.PopulateButton.Content = "Fixa lite svenska namn, tack!" }, "Normal")
+# $syncHash.PopulateButton.Dispatcher.Invoke({ $syncHash.PopulateButton.Content = "Fixa lite svenska namn, tack!" }, "Normal")
 
-# Mycket svårare att felsöka i andra trådar!
-
-# # # # # # # # # # 3 # # # # # # # # # #
-
+# Svårare att felsöka i andra trådar!
