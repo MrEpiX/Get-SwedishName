@@ -6,35 +6,27 @@ Import-Module "$($PSScriptRoot)\MaterialDesignThemes.wpf.dll"
 
 $addedType = Add-Type -Language CSharp @'
 using System.ComponentModel;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace TestNamespace
 {
-    public class PeopleListClass : INotifyPropertyChanged
+    public class People
     {
-        private List<object> peopleList;
-        public List<object> PeopleList
+        private ObservableCollection<object> _peopleList;
+        public ObservableCollection<object> PeopleList
         {
-            get { return peopleList; }
+            get 
+            {
+                return _peopleList;
+            }
             set
             {
-                peopleList = value;
-                NotifyPropertyChanged("PeopleList");
+                _peopleList = value;
             }
         }
-
-        public PeopleListClass()
+        public People()
         {
-            peopleList = new List<object>();
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        private void NotifyPropertyChanged(string property)
-        {
-            if(PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(property));
-            }
+            _peopleList = new ObservableCollection<object>();
         }
     }
 }
@@ -53,7 +45,7 @@ $syncHash = [hashtable]::Synchronized(@{})
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
-        xmlns:local="clr-namespace:TestNamespace.PeopleListClass;assembly=$($assembly)"
+        xmlns:local="clr-namespace:TestNamespace;assembly=$($assembly)"
         Title="Get-SwedishNamesXAML"
         SizeToContent="WidthAndHeight"
         ResizeMode="NoResize"
@@ -65,6 +57,10 @@ $syncHash = [hashtable]::Synchronized(@{})
         TextOptions.TextRenderingMode="Auto"        
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}">
+        
+    <Window.DataContext>
+        <local:People></local:People>
+    </Window.DataContext>
 
     <Window.Resources>
         <ResourceDictionary>
@@ -82,7 +78,7 @@ $syncHash = [hashtable]::Synchronized(@{})
             <RowDefinition Height="400"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <ListView Name="TestListView">
+        <ListView Name="TestListView" ItemsSource="{Binding PeopleList}">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="First Name" DisplayMemberBinding="{Binding FirstName}"/>
@@ -104,7 +100,7 @@ $syncHash.Window = [Windows.Markup.XamlReader]::Load($reader)
 # Creates/sets variables from the objects in the XAML
 $xaml.SelectNodes("//*[@*[contains(translate(name(.),'n','N'),'Name')]]") | ForEach-Object { $syncHash.Add($_.Name,$syncHash.Window.FindName($_.Name)) }
 
-$TestCollection = New-Object TestNamespace.PeopleListClass
+$TestCollection = New-Object TestNamespace.People
 $Binding = New-Object System.Windows.Data.Binding
 $Binding.Path = "PeopleList"
 $Binding.Source = $TestCollection
@@ -121,7 +117,7 @@ $syncHash.PopulateButton.Add_Click{
 
     foreach($item in $result.names)
     {
-        [void]$TestCollection.PeopleList.Add($item)
+        $TestCollection.PeopleList.Add($item)
     }
 }
 
